@@ -1,0 +1,80 @@
+CÓDIGO DE SAÍDA PARA SHIFT REGISTER USANDO VETOR:
+const uint8_t tam = 8;
+int clock = 3;
+int vetor [tam];
+int dadosds =4;
+int wstcp =2;
+int indice = 0;
+
+void setup(){
+  pinMode(clock,OUTPUT);
+  pinMode(dadosds,OUTPUT);
+  pinMode(wstcp,OUTPUT);
+}
+void loop(){
+  if( indice >=tam){ //volta a 0 quando chegar no ultimo ponto
+    indice = 0;
+  }
+  for(int i = 0; i < tam; i++){ //faz um loop que zera o vetor
+    vetor[i] = 0;
+  }
+  vetor[indice] = 1;
+  digitalWrite(wstcp, LOW);         //escrita = 0
+  for(int i=0; i < tam; i++){
+    digitalWrite(clock,LOW);        //borda de descida do clock
+    digitalWrite(dadosds, boolean(vetor[i]));    //escreve todas as componentes do vetor
+    digitalWrite(clock,HIGH);          //borda de subida do clock
+  }
+  digitalWrite(wstcp,HIGH);
+  indice++;
+  delay(50);
+}
+________________________________________________________________________________________________________________
+CÓDIGO DE SAÍDA PARA SHIFT REGISTER USANDO VETOR FIXO:
+const uint8_t tam = 8;
+int clock = 3;
+int vetor [tam] = {1,0,0,0,0,1,0,0};          // definir qualquer vetor
+int dadosds =4;
+int wstcp =2;
+int indice = 0;
+void setup(){
+  pinMode(clock,OUTPUT);
+  pinMode(dadosds,OUTPUT);
+  pinMode(wstcp,OUTPUT);
+}
+void loop(){
+  if( indice <0){indice = 7;}
+  digitalWrite(wstcp, LOW);                         //escrita = 0
+  for(int i=0; i < tam; i++){
+    digitalWrite(clock,LOW);                      //borda de descida do clock
+    digitalWrite(dadosds, boolean(vetor[i]));    //escreve todas as componentes do vetor
+    digitalWrite(clock,HIGH);                   //borda de subida do clock
+  }
+  digitalWrite(wstcp,HIGH);
+  indice--;
+}
+__________________________________________________________________________________________________________
+CÓDIGO DE SAÍDA PARA SHIFT REGISTER USANDO SHIFTOUT:
+int wstcp = 2;        //pino 12 do shift register(escreve)
+int clock = 3;        //pino 11 do shift register(clock)
+int dadosds = 4;      //pino 14 do shift register(dados)
+void setup() {
+  pinMode(clock, OUTPUT);
+  pinMode(dadosds, OUTPUT);
+  pinMode(wstcp, OUTPUT);
+}
+void loop() {
+  for(uint16_t i = 1; i < 256; i=i*2){      // contagem escrever no shift register. i=i*2 pois está em binario 
+    digitalWrite(wstcp, LOW);
+    shiftOut(dadosds, clock, LSBFIRST, i);  
+    digitalWrite(wstcp, HIGH);
+    delay(500);
+  }
+} 
+// 1 > pino que será a saída.
+// 2 > pino que é alterado a cada novo valor de saída.
+// 3 > bitorder, pode ser MSBFIRST ou LSBFIRST.
+// 4 > valor
+_____________________________________________________________________________________________________________________
+
+
