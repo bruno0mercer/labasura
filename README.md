@@ -1,3 +1,4 @@
 ## labasura
 
-- [Estilo de código](estilo.md)
+- [estilo de código](estilo.md)
+- [metas](metas.md)
